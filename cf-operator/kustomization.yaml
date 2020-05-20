@@ -1,0 +1,24 @@
+# Images modify the tags for images without
+# creating patches.
+images:
+- name: cfcontainerization/cf-operator
+  newTag: v0.4.2-147.gb88e4296
+- name: cfcontainerization/quarks-job
+  newTag: v0.0.0-0.g35b1d10
+
+# List of resource files that kustomize reads, modifies
+# and emits as a YAML string
+resources:
+- cf-operator-clusterrole.yaml
+- cf-operator-crb.yaml
+- cf-operator-deploy.yaml
+- cf-operator-quarks-job-clusterrole.yaml
+- cf-operator-quarks-job-crb.yaml
+- cf-operator-quarks-job-deploy.yaml
+- cf-operator-quarks-job-sa.yaml
+- cf-operator-rb.yaml
+- cf-operator-role.yaml
+- cf-operator-sa.yaml
+- cf-operator-webhook-svc.yaml
+- quarks-job-rb.yaml
+- quarks-job-role.yaml

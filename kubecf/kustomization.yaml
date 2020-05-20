@@ -1,0 +1,82 @@
+# Labels to add to all resources and selectors.
+commonLabels:
+  app.kubernetes.io/instance: kubecf
+  app.kubernetes.io/managed-by: Tiller
+  app.kubernetes.io/name: kubecf
+  app.kubernetes.io/version: v0.0.0-a4a9bd5
+  helm.sh/chart: kubecf-v0.0.0-a4a9bd5
+
+# Each entry in this list results in the creation of
+# one ConfigMap resource (it's a generator of n maps).
+configMapGenerator:
+- name: ops-cc-worker
+- name: ops-log-api
+- name: ops-nats
+- name: ops-singleton-blobstore
+- name: ops-sizing
+- name: ops-adapter
+- name: ops-auctioneer
+- literals:
+  - ops=
+  name: ops-eirini-helm
+- name: ops-move-routing-api
+- literals:
+  - ops=
+  name: ops-brain-tests
+- name: ops-doppler
+- name: ops-log-cache
+- name: ops-routing-api
+- name: ops-smoke-tests
+- name: ops-set-opensuse-stemcells
+- name: ops-move-auctioneer
+- literals:
+  - ops=
+  name: ops-acceptance-tests
+- name: ops-diego-api
+- name: ops-releases
+- literals:
+  - ops=
+  name: user-provided-properties
+- name: ops-move-log-cache
+- name: cf-deployment
+- name: ops-router
+- name: ops-azs
+- name: ops-credhub
+- name: ops-diego-cell
+- name: ops-tcp-router
+- name: ops-set-deployment-name
+- literals:
+  - ops=
+  name: ops-app-autoscaler
+- name: ops-scheduler
+- name: ops-api
+- name: ops-database
+- name: ops-sync-integration-tests
+- name: ops-uaa
+- name: ops-addons
+- name: ops-set-suse-buildpacks
+
+# List of resource files that kustomize reads, modifies
+# and emits as a YAML string
+resources:
+- kubecf-boshdeployment.yaml
+- kubecf-default-psp-rb.yaml
+- kubecf-default-psp-role.yaml
+- kubecf-default-psp.yaml
+- router-public-svc.yaml
+- ssh-proxy-public-svc.yaml
+- tcp-router-public-svc.yaml
+
+# Each entry in this list results in the creation of
+# one Secret resource (it's a generator of n secrets).
+secretGenerator:
+- name: var-k8s-host-url
+  type: Opaque
+- name: var-k8s-node-ca
+  type: Opaque
+- name: var-k8s-service-token
+  type: Opaque
+- name: var-k8s-service-username
+  type: Opaque
+- name: var-system-domain
+  type: Opaque
