@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cf-operator-quarks-job
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: quarks-job
+  template:
+    metadata:
+      labels:
+        name: quarks-job
+    spec:
+      containers:
+      - command:
+        - quarks-job
+        env:
+        - name: OPERATOR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CTX_TIMEOUT
+          value: "30"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: OPERATOR_NAME
+          value: quarks-job
+        - name: DOCKER_IMAGE_ORG
+          value: cfcontainerization
+        - name: DOCKER_IMAGE_REPOSITORY
+          value: quarks-job
+        - name: DOCKER_IMAGE_TAG
+          value: v0.0.0-0.g35b1d10
+        - name: DOCKER_IMAGE_PULL_POLICY
+          value: IfNotPresent
+        image: cfcontainerization/quarks-job:v0.0.0-0.g35b1d10
+        imagePullPolicy: IfNotPresent
+        name: quarks-job
+        ports:
+        - containerPort: 60000
+          name: metrics
+      serviceAccountName: cf-operator-quarks-job

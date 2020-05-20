@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cf-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: cf-operator
+  template:
+    metadata:
+      labels:
+        name: cf-operator
+    spec:
+      containers:
+      - command:
+        - cf-operator
+        env:
+        - name: CF_OPERATOR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CTX_TIMEOUT
+          value: "30"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: OPERATOR_NAME
+          value: cf-operator
+        - name: DOCKER_IMAGE_ORG
+          value: cfcontainerization
+        - name: DOCKER_IMAGE_REPOSITORY
+          value: cf-operator
+        - name: DOCKER_IMAGE_TAG
+          value: v0.4.2-147.gb88e4296
+        - name: DOCKER_IMAGE_PULL_POLICY
+          value: IfNotPresent
+        - name: CF_OPERATOR_WEBHOOK_SERVICE_PORT
+          value: "2999"
+        - name: CF_OPERATOR_WEBHOOK_USE_SERVICE_REFERENCE
+          value: "true"
+        image: cfcontainerization/cf-operator:v0.4.2-147.gb88e4296
+        imagePullPolicy: IfNotPresent
+        name: cf-operator
+        ports:
+        - containerPort: 60000
+          name: metrics
+        - containerPort: 2999
+          name: webhook
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 2999
+            scheme: HTTPS
+          initialDelaySeconds: 2
+      serviceAccountName: cf-operator
